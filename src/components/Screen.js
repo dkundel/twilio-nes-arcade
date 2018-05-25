@@ -68,6 +68,15 @@ class Screen extends Component {
     this.imageData.data.set(this.buf8);
     this.context.putImageData(this.imageData, 0, 0);
   };
+
+  stretchToContainer = () => {
+    const container = this.canvas.parentNode;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const ratio = SCREEN_HEIGHT / SCREEN_WIDTH;
+    this.canvas.style.width = `${containerWidth}px`;
+    this.canvas.style.height = `${Math.round(containerWidth * ratio)}px`;
+  };
 }
 
 export default Screen;

@@ -61,7 +61,9 @@ class TryGame extends Component {
     return (
       <div>
         <h1>Try your fate</h1>
-        <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
+        <div style={{ width: 500 }}>
+          <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
+        </div>
         <div>
           <input
             type="text"

@@ -117,6 +117,7 @@ class Game extends Component {
       onFrame: this.screen.setBuffer,
       onStatusUpdate: console.log
     });
+    this.screen.stretchToContainer();
   }
 
   restart() {
@@ -184,14 +185,7 @@ class Game extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <Screen ref={screen => (this.screen = screen)} />
-        <div>
-          <pre ref={debug => (this.debug = debug)} />
-        </div>
-      </div>
-    );
+    return <Screen ref={screen => (this.screen = screen)} />;
   }
 }
 
