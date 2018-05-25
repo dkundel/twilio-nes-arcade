@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Controller } from 'jsnes';
 import Game from '../components/Game';
 
 const AVAILABLE_BUTTONS = [
