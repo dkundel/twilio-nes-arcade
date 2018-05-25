@@ -5,6 +5,7 @@
   "dependencies": {
     "jsnes": "^1.0.1",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.flatten": "^4.4.0",
     "node-emoji": "^1.8.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
