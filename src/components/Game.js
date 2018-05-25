@@ -107,7 +107,6 @@ class Game extends Component {
       this.renderLoop = undefined;
     }
     this.nes.fromJSON(cloneDeep(this.gameMemoryData));
-    window.nes = this.nes.cpu.mem;
   }
 
   playerStillActive() {
@@ -118,12 +117,6 @@ class Game extends Component {
     for (let i = 0; i < skipCount; i++) {
       this.nes.frame();
     }
-  }
-
-  simulateButtonPress(button) {
-    this.nes.buttonDown(1, button);
-    this.skipFrames(60);
-    this.nes.buttonUp(1, button);
   }
 
   render() {
