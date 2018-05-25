@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "jsnes": "^1.0.1",
+    "lodash.clonedeep": "^4.5.0",
+    "node-emoji": "^1.8.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.2.2",
