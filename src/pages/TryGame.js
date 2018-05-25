@@ -64,9 +64,7 @@ class TryGame extends Component {
           <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
         </div>
         <div>
-          <input
-            type="text"
-            name="buttonSeries"
+          <textarea
             value={this.state.buttonSeries}
             onChange={this.updateTextBox}
           />

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { NES, Controller } from 'jsnes';
+import { NES } from 'jsnes';
 import cloneDeep from 'lodash.clonedeep';
-import { unemojify } from 'node-emoji';
 
 import Screen from './Screen';
 import {
@@ -10,65 +9,11 @@ import {
   getScore,
   getCoins
 } from '../utils/marioMemory';
+import { parseInput } from '../utils/input';
 
 const GAME_URL =
   'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
 const DEFAULT_SPEED = 5;
-const DURATION_OF_BUTTON_IN_FRAMES = 20;
-const WAIT = Infinity;
-const EMOJI_BUTTON_MAP = {
-  u: Controller.BUTTON_UP,
-  d: Controller.BUTTON_DOWN,
-  l: Controller.BUTTON_LEFT,
-  r: Controller.BUTTON_RIGHT,
-  a: Controller.BUTTON_A,
-  b: Controller.BUTTON_B,
-  s: Controller.BUTTON_START,
-  x: Controller.BUTTON_SELECT,
-  w: WAIT,
-  ':arrow_up:': Controller.BUTTON_UP,
-  ':arrow_down:': Controller.BUTTON_DOWN,
-  ':arrow_left:': Controller.BUTTON_LEFT,
-  ':arrow_right:': Controller.BUTTON_RIGHT,
-  ':rocket:': Controller.BUTTON_A,
-  ':fist:': Controller.BUTTON_B,
-  ':raised_hand:': Controller.BUTTON_START,
-  ':point_right:': Controller.BUTTON_SELECT
-};
-
-function convertEmojisToButtons(text) {
-  const emojiString = unemojify(text).toLowerCase();
-  if (emojiString.startsWith(':clock')) {
-    return WAIT;
-  }
-  const button = EMOJI_BUTTON_MAP[emojiString];
-  if (typeof button !== 'undefined') {
-    return button;
-  }
-  return -1;
-}
-
-function convertToButtonCommandsPerFrame(buttons) {
-  const instructions = [];
-  for (const button of buttons) {
-    if (button === WAIT) {
-      instructions.push({ mode: 'none' });
-    } else {
-      instructions.push({ button, mode: 'press' });
-    }
-
-    for (let i = 0; i < DURATION_OF_BUTTON_IN_FRAMES - 2; i++) {
-      instructions.push({ mode: 'none' });
-    }
-
-    if (button === WAIT) {
-      instructions.push({ mode: 'none' });
-    } else {
-      instructions.push({ button, mode: 'release' });
-    }
-  }
-  return instructions;
-}
 
 class Game extends Component {
   constructor(props) {
@@ -125,11 +70,8 @@ class Game extends Component {
     this.renderLoop = window.requestAnimationFrame(this.gameLoop);
   }
 
-  setButtons(buttons) {
-    this.buttons = [...buttons]
-      .map(convertEmojisToButtons)
-      .filter(x => x !== -1);
-    this.buttonInstructions = convertToButtonCommandsPerFrame(this.buttons);
+  setButtons(inputString) {
+    this.buttonInstructions = parseInput(inputString);
   }
 
   gameLoop() {
