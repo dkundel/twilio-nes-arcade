@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NES } from 'jsnes';
+import { NES, Controller } from 'jsnes';
 
 import Screen from './Screen';
 
@@ -13,7 +13,7 @@ class Game extends Component {
     this.state = {
       speed: DEFAULT_SPEED
     };
-    this.renderGameFrame = this.renderGameFrame.bind(this);
+    this.gameLoop = this.gameLoop.bind(this);
   }
   async loadRom() {
     // I should change this to fetch. This is taken from the jsnes-web project
@@ -38,31 +38,79 @@ class Game extends Component {
   }
 
   async componentDidMount() {
-    this.romData = await this.loadRom();
+    const romData = await this.loadRom();
     this.nes = new NES({
       onFrame: this.screen.setBuffer,
       onStatusUpdate: console.log
     });
-    this.nes.loadROM(this.romData);
-    console.log(this.nes.toJSON());
-    this.nes.frame();
-    window.requestAnimationFrame(this.renderGameFrame);
+    const memory = await (await fetch('/gameData.json')).json();
+    memory.romData = romData;
+    this.gameMemoryData = memory;
+    this.initGame();
+    this.buttons = [
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_RIGHT
+      // Controller.BUTTON_LEFT,
+      // Controller.BUTTON_LEFT,
+      // Controller.BUTTON_LEFT
+    ];
+    window.requestAnimationFrame(this.gameLoop);
   }
 
-  renderGameFrame() {
+  gameLoop() {
+    if (this.buttons[0]) {
+      this.simulateButtonPress(this.buttons[0]);
+      this.buttons = this.buttons.slice(1);
+    }
+
     // Skip frames depending on the speed (for speed runs)
     for (let x = 0; x < this.state.speed; x++) {
       this.nes.frame();
     }
 
     this.screen.writeBuffer();
-    window.requestAnimationFrame(this.renderGameFrame);
+    window.requestAnimationFrame(this.gameLoop);
+  }
+
+  initGame() {
+    this.nes.fromJSON(this.gameMemoryData);
+    // this.skipGameScreen();
+  }
+
+  // skipGameScreen() {
+  //   this.skipFrames(40);
+  //   this.simulateButtonPress(Controller.BUTTON_START);
+  //   this.skipFrames(120);
+  // }
+
+  skipFrames(skipCount) {
+    for (let i = 0; i < skipCount; i++) {
+      this.nes.frame();
+    }
+  }
+
+  simulateButtonPress(button) {
+    this.nes.buttonDown(1, button);
+    this.skipFrames(60);
+    this.nes.buttonUp(1, button);
   }
 
   render() {
     return (
       <div>
         <Screen ref={screen => (this.screen = screen)} />
+        <div>
+          <pre ref={debug => (this.debug = debug)} />
+        </div>
       </div>
     );
   }
