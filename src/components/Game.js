@@ -31,7 +31,6 @@ const EMOJI_BUTTON_MAP = {
 function convertEmojisToButtons(text) {
   const emojiString = unemojify(text).toLowerCase();
   const button = EMOJI_BUTTON_MAP[emojiString];
-  console.log(text, emojiString, button);
   if (typeof button !== 'undefined') {
     return button;
   }
@@ -107,7 +106,6 @@ class Game extends Component {
     this.buttons = [...buttons]
       .map(convertEmojisToButtons)
       .filter(x => x !== -1);
-    console.log(this.buttons);
     this.buttonInstructions = convertToButtonCommandsPerFrame(this.buttons);
   }
 
