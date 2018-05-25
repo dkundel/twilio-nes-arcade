@@ -2,7 +2,17 @@ import React, { Component } from 'react';
 import { Controller } from 'jsnes';
 import Game from '../components/Game';
 
-const AVAILABLE_BUTTONS = ['⬆️', '➡️', '⬅️', '⬇️', '🚀', '✊', '✋', '👉'];
+const AVAILABLE_BUTTONS = [
+  '⬆️',
+  '➡️',
+  '⬅️',
+  '⬇️',
+  '🚀',
+  '✊',
+  '✋',
+  '👉',
+  '🕐'
+];
 
 class TryGame extends Component {
   constructor(props) {
@@ -15,6 +25,7 @@ class TryGame extends Component {
     this.updateTextBox = this.updateTextBox.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.setButtons = this.setButtons.bind(this);
+    this.gameOver = this.gameOver.bind(this);
   }
 
   addEmoji(evt) {
@@ -29,19 +40,23 @@ class TryGame extends Component {
   }
 
   resetGame() {
-    this.game.reset();
+    this.game.restart();
   }
 
   setButtons() {
     this.game.setButtons(this.state.buttonSeries);
-    this.game.reset();
+    this.game.restart();
+  }
+
+  gameOver() {
+    console.log('%c GAME OVER', 'font-size:3em;color:red;');
   }
 
   render() {
     return (
       <div>
         <h1>Try your fate</h1>
-        <Game ref={game => (this.game = game)} />
+        <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
         <div>
           <input
             type="text"

@@ -4,11 +4,13 @@ import cloneDeep from 'lodash.clonedeep';
 import { unemojify } from 'node-emoji';
 
 import Screen from './Screen';
+import { getCurrentLives } from '../utils/marioMemory';
 
 const GAME_URL =
   'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
-const DEFAULT_SPEED = 1;
+const DEFAULT_SPEED = 5;
 const DURATION_OF_BUTTON_IN_FRAMES = 20;
+const WAIT = Infinity;
 const EMOJI_BUTTON_MAP = {
   u: Controller.BUTTON_UP,
   d: Controller.BUTTON_DOWN,
@@ -18,6 +20,7 @@ const EMOJI_BUTTON_MAP = {
   b: Controller.BUTTON_B,
   s: Controller.BUTTON_START,
   x: Controller.BUTTON_SELECT,
+  w: WAIT,
   ':arrow_up:': Controller.BUTTON_UP,
   ':arrow_down:': Controller.BUTTON_DOWN,
   ':arrow_left:': Controller.BUTTON_LEFT,
@@ -30,6 +33,9 @@ const EMOJI_BUTTON_MAP = {
 
 function convertEmojisToButtons(text) {
   const emojiString = unemojify(text).toLowerCase();
+  if (emojiString.startsWith(':clock')) {
+    return WAIT;
+  }
   const button = EMOJI_BUTTON_MAP[emojiString];
   if (typeof button !== 'undefined') {
     return button;
@@ -40,11 +46,21 @@ function convertEmojisToButtons(text) {
 function convertToButtonCommandsPerFrame(buttons) {
   const instructions = [];
   for (const button of buttons) {
-    instructions.push({ button, mode: 'press' });
+    if (button === WAIT) {
+      instructions.push({ mode: 'none' });
+    } else {
+      instructions.push({ button, mode: 'press' });
+    }
+
     for (let i = 0; i < DURATION_OF_BUTTON_IN_FRAMES - 2; i++) {
       instructions.push({ mode: 'none' });
     }
-    instructions.push({ button, mode: 'release' });
+
+    if (button === WAIT) {
+      instructions.push({ mode: 'none' });
+    } else {
+      instructions.push({ button, mode: 'release' });
+    }
   }
   return instructions;
 }
@@ -57,6 +73,7 @@ class Game extends Component {
     };
     this.gameLoop = this.gameLoop.bind(this);
     this.buttonInstructions = [];
+    this.gameOver = this.props.gameOver || function() {};
   }
 
   shouldComponentUpdate() {
@@ -97,8 +114,8 @@ class Game extends Component {
     });
   }
 
-  reset() {
-    this.initGame();
+  restart() {
+    this.reset();
     this.renderLoop = window.requestAnimationFrame(this.gameLoop);
   }
 
@@ -122,26 +139,31 @@ class Game extends Component {
         this.buttonInstructions = this.buttonInstructions.slice(1);
       }
       this.nes.frame();
+
+      if (!this.playerStillActive()) {
+        this.gameOver();
+        this.reset();
+        return;
+      }
     }
 
     this.screen.writeBuffer();
     this.renderLoop = window.requestAnimationFrame(this.gameLoop);
   }
 
-  initGame() {
+  reset() {
     if (this.renderLoop) {
       window.cancelAnimationFrame(this.renderLoop);
       this.renderLoop = undefined;
     }
     this.nes.fromJSON(cloneDeep(this.gameMemoryData));
-    // this.skipGameScreen();
+    this.nes.cpu.mem[0x07e1 & 0x7ff] = 1;
+    window.nes = this.nes.cpu.mem;
   }
 
-  // skipGameScreen() {
-  //   this.skipFrames(40);
-  //   this.simulateButtonPress(Controller.BUTTON_START);
-  //   this.skipFrames(120);
-  // }
+  playerStillActive() {
+    return getCurrentLives(this.nes) >= 2;
+  }
 
   skipFrames(skipCount) {
     for (let i = 0; i < skipCount; i++) {
