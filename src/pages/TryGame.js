@@ -48,8 +48,13 @@ class TryGame extends Component {
     this.game.restart();
   }
 
-  gameOver() {
-    console.log('%c GAME OVER', 'font-size:3em;color:red;');
+  gameOver({ score, coins }) {
+    console.log(
+      '%c GAME OVER. Score %d, Coins %d',
+      'font-size:3em;color:red;',
+      score,
+      coins
+    );
   }
 
   render() {

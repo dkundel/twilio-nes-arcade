@@ -4,7 +4,12 @@ import cloneDeep from 'lodash.clonedeep';
 import { unemojify } from 'node-emoji';
 
 import Screen from './Screen';
-import { getCurrentLives } from '../utils/marioMemory';
+import {
+  getCurrentLives,
+  getTime,
+  getScore,
+  getCoins
+} from '../utils/marioMemory';
 
 const GAME_URL =
   'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
@@ -139,9 +144,11 @@ class Game extends Component {
         this.buttonInstructions = this.buttonInstructions.slice(1);
       }
       this.nes.frame();
-
       if (!this.playerStillActive()) {
-        this.gameOver();
+        const finalTime = getTime(this.nes);
+        const score = getScore(this.nes);
+        const coins = getCoins(this.nes);
+        this.gameOver({ score, coins, finalTime });
         this.reset();
         return;
       }
@@ -157,7 +164,6 @@ class Game extends Component {
       this.renderLoop = undefined;
     }
     this.nes.fromJSON(cloneDeep(this.gameMemoryData));
-    this.nes.cpu.mem[0x07e1 & 0x7ff] = 1;
     window.nes = this.nes.cpu.mem;
   }
 
