@@ -10,6 +10,14 @@ const GAME_URL =
 const DEFAULT_SPEED = 1;
 const DURATION_OF_BUTTON_IN_FRAMES = 20;
 const EMOJI_BUTTON_MAP = {
+  u: Controller.BUTTON_UP,
+  d: Controller.BUTTON_DOWN,
+  l: Controller.BUTTON_LEFT,
+  r: Controller.BUTTON_RIGHT,
+  a: Controller.BUTTON_A,
+  b: Controller.BUTTON_B,
+  s: Controller.BUTTON_START,
+  x: Controller.BUTTON_SELECT,
   ':arrow_up:': Controller.BUTTON_UP,
   ':arrow_down:': Controller.BUTTON_DOWN,
   ':arrow_left:': Controller.BUTTON_LEFT,
@@ -21,7 +29,7 @@ const EMOJI_BUTTON_MAP = {
 };
 
 function convertEmojisToButtons(text) {
-  const emojiString = unemojify(text);
+  const emojiString = unemojify(text).toLowerCase();
   const button = EMOJI_BUTTON_MAP[emojiString];
   console.log(text, emojiString, button);
   if (typeof button !== 'undefined') {
