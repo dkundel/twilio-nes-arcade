@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { Text, Link } from './common';
+
 const FooterWrapper = styled.footer`
   padding: 20px;
   text-align: center;
@@ -9,9 +11,9 @@ const FooterWrapper = styled.footer`
 const Footer = () => {
   return (
     <FooterWrapper>
-      <p>
-        Created by <a href="https://github.com/dkundel">Dominik Kundel</a>
-      </p>
+      <Text>
+        Created by <Link href="https://github.com/dkundel">Dominik Kundel</Link>
+      </Text>
     </FooterWrapper>
   );
 };

@@ -13,7 +13,9 @@ const Twilio = styled.img`
 `;
 const MaxTitle = styled(Title)`
   margin: 0;
-  font-size: 60px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  font-size: 50px;
 `;
 
 const Header = () => {

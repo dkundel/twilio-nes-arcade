@@ -13,15 +13,14 @@ import { parseInput } from '../utils/input';
 
 const GAME_URL =
   'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
-const DEFAULT_SPEED = 5;
+const DEFAULT_SPEED = 1;
 
 class Game extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      speed: DEFAULT_SPEED
-    };
+    this.speed = DEFAULT_SPEED;
     this.gameLoop = this.gameLoop.bind(this);
+    this.layout = this.layout.bind(this);
     this.buttonInstructions = [];
     this.gameOver = this.props.gameOver || function() {};
   }
@@ -62,6 +61,16 @@ class Game extends Component {
       onFrame: this.screen.setBuffer,
       onStatusUpdate: console.log
     });
+    this.layout();
+
+    window.addEventListener('resize', this.layout);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.layout);
+  }
+
+  layout() {
     this.screen.stretchToContainer();
   }
 
@@ -74,9 +83,13 @@ class Game extends Component {
     this.buttonInstructions = parseInput(inputString);
   }
 
+  setSpeed(speed = DEFAULT_SPEED) {
+    this.speed = speed;
+  }
+
   gameLoop() {
     // Skip frames depending on the speed (for speed runs)
-    for (let x = 0; x < this.state.speed; x++) {
+    for (let x = 0; x < this.speed; x++) {
       if (this.buttonInstructions.length > 0) {
         const { button, mode } = this.buttonInstructions[0];
         if (mode === 'release') {

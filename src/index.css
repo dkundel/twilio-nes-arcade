@@ -9,11 +9,11 @@ body {
 }
 
 body {
-  background-image: url('https://www.twilio.com/docs/static/img/scanlines.da1a808d.svg');
+  background-image: url('/scanlines.svg');
 }
 
 #root {
-  background: rgb(13, 18, 43, 0.9);
+  background: rgb(13, 18, 43, 0.7);
   min-height: 100vh;
   width: 100%;
 }

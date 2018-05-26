@@ -5,25 +5,36 @@ import flatten from 'lodash.flatten';
 export const WAIT = Infinity;
 export const DURATION_OF_BUTTON_IN_FRAMES = 20;
 
-export const EMOJI_BUTTON_MAP = {
-  u: Controller.BUTTON_UP,
-  d: Controller.BUTTON_DOWN,
-  l: Controller.BUTTON_LEFT,
-  r: Controller.BUTTON_RIGHT,
-  a: Controller.BUTTON_A,
-  b: Controller.BUTTON_B,
-  s: Controller.BUTTON_START,
-  x: Controller.BUTTON_SELECT,
-  w: WAIT,
-  ':arrow_up:': Controller.BUTTON_UP,
-  ':arrow_down:': Controller.BUTTON_DOWN,
-  ':arrow_left:': Controller.BUTTON_LEFT,
-  ':arrow_right:': Controller.BUTTON_RIGHT,
-  ':rocket:': Controller.BUTTON_A,
-  ':fist:': Controller.BUTTON_B,
-  ':raised_hand:': Controller.BUTTON_START,
-  ':point_right:': Controller.BUTTON_SELECT
+export const RAW_MAP = {
+  u: 'Up',
+  d: 'Down',
+  l: 'Left',
+  r: 'Right',
+  a: 'A',
+  b: 'B',
+  s: 'START',
+  x: 'SELECT',
+  w: 'Wait',
+  ':arrow_up:': 'Up',
+  ':arrow_down:': 'Down',
+  ':arrow_left:': 'Left',
+  ':arrow_right:': 'Right',
+  ':rocket:': 'A',
+  ':fist:': 'B',
+  ':raised_hand:': 'START',
+  ':point_right:': 'SELECT',
+  ':clock1:': 'Wait'
 };
+
+export const EMOJI_BUTTON_MAP = Object.keys(RAW_MAP).reduce((map, key) => {
+  const mappedValue = RAW_MAP[key];
+  if (mappedValue === 'Wait') {
+    map[key] = WAIT;
+  } else {
+    map[key] = Controller['BUTTON_' + mappedValue.toUpperCase()];
+  }
+  return map;
+}, {});
 
 export const AVAILABLE_BUTTONS = [
   '⬆️',
