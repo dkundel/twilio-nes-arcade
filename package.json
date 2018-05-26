@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "common-tags": "^1.7.2",
     "jsnes": "^1.0.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.flatten": "^4.4.0",
