@@ -25,6 +25,18 @@ export const EMOJI_BUTTON_MAP = {
   ':point_right:': Controller.BUTTON_SELECT
 };
 
+export const AVAILABLE_BUTTONS = [
+  '⬆️',
+  '➡️',
+  '⬅️',
+  '⬇️',
+  '🚀',
+  '✊',
+  '✋',
+  '👉',
+  '🕐'
+];
+
 function convertEmojisToButtons(text) {
   const emojiString = unemojify(text).toLowerCase();
   if (emojiString.startsWith(':clock')) {

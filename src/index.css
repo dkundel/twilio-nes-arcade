@@ -1,5 +1,19 @@
+html,
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background: #0d122b;
+  color: #fff;
+  min-height: 100vh;
+}
+
+body {
+  background-image: url('https://www.twilio.com/docs/static/img/scanlines.da1a808d.svg');
+}
+
+#root {
+  background: rgb(13, 18, 43, 0.9);
+  min-height: 100vh;
+  width: 100%;
 }

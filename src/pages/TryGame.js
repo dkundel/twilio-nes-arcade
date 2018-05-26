@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
-import Game from '../components/Game';
 
-const AVAILABLE_BUTTONS = [
-  '⬆️',
-  '➡️',
-  '⬅️',
-  '⬇️',
-  '🚀',
-  '✊',
-  '✋',
-  '👉',
-  '🕐'
-];
+import { Title } from '../components/common';
+import Game from '../components/Game';
+import { AVAILABLE_BUTTONS } from '../utils/input';
 
 class TryGame extends Component {
   constructor(props) {
@@ -59,7 +50,7 @@ class TryGame extends Component {
   render() {
     return (
       <div>
-        <h1>Try your fate</h1>
+        <Title>Try your fate</Title>
         <div style={{ width: 500 }}>
           <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
         </div>
