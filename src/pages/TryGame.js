@@ -96,8 +96,13 @@ const ControlListOption = styled(Text.withComponent('li'))`
 class TryGame extends Component {
   constructor(props) {
     super(props);
+    let buttonSeries = '';
+    if (localStorage) {
+      buttonSeries = localStorage.getItem('buttonSeries') || '';
+    }
+
     this.state = {
-      buttonSeries: ''
+      buttonSeries
     };
 
     this.addEmoji = this.addEmoji.bind(this);
@@ -111,11 +116,13 @@ class TryGame extends Component {
   addEmoji(evt) {
     const value = evt.target.innerText;
     const buttonSeries = this.state.buttonSeries + value;
+    localStorage.setItem('buttonSeries', buttonSeries);
     this.setState({ buttonSeries });
   }
 
   updateTextBox(evt) {
     const buttonSeries = evt.target.value;
+    localStorage.setItem('buttonSeries', buttonSeries);
     this.setState({ buttonSeries });
   }
 
@@ -150,7 +157,7 @@ class TryGame extends Component {
         key = emoji(key);
       }
       return (
-        <ControlListOption>
+        <ControlListOption key={key}>
           {key}: <span>{val}</span>
         </ControlListOption>
       );
@@ -167,7 +174,6 @@ class TryGame extends Component {
             Try out your moves before submitting them to the competition.
           </Subtitle>
         </TitleContainer>
-
         <GameContainer>
           <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
         </GameContainer>
@@ -177,7 +183,7 @@ class TryGame extends Component {
             onChange={this.updateTextBox}
           />
           <RunButton onClick={this.runGame}>Run Game</RunButton>
-          <RunButton onClick={this.runGame}>Run Game (5x Speed)</RunButton>
+          <RunButton onClick={this.speedRunGame}>Run Game (5x Speed)</RunButton>
         </InputContainer>
         <ControlContainer>
           {AVAILABLE_BUTTONS.map(emoji => (
@@ -188,7 +194,9 @@ class TryGame extends Component {
         </ControlContainer>
         <ManualContainer>
           <ManualTitle>Manual</ManualTitle>
-          {GameManualText.split('---').map(t => <Text>{t}</Text>)}
+          {GameManualText.split('---').map((t, idx) => (
+            <Text key={idx}>{t}</Text>
+          ))}
           <ManualTitle>Controls</ManualTitle>
           <Text>The following options are available:</Text>
           {this.renderControls()}
