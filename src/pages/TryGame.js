@@ -6,6 +6,7 @@ import { Title, ActionButton, Button, Text } from '../components/common';
 import Game from '../components/Game';
 import { AVAILABLE_BUTTONS, RAW_MAP } from '../utils/input';
 import { GameManualText } from '../utils/text';
+import ResultScreen from '../components/ResultScreen';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -80,6 +81,11 @@ const GameContainer = styled.div`
   grid-area: game;
 `;
 
+const GameResultContainer = styled.div`
+  grid-area: game;
+  z-index: 999;
+`;
+
 const ManualContainer = styled.div`
   grid-area: manual;
 `;
@@ -101,8 +107,16 @@ class TryGame extends Component {
       buttonSeries = localStorage.getItem('buttonSeries') || '';
     }
 
+    const gameResult = {
+      coins: 0,
+      time: 0,
+      score: 0
+    };
+
     this.state = {
-      buttonSeries
+      buttonSeries,
+      gameResult,
+      gameFinished: false
     };
 
     this.addEmoji = this.addEmoji.bind(this);
@@ -131,17 +145,21 @@ class TryGame extends Component {
   }
 
   runGame() {
+    this.setState({ gameFinished: false });
     this.game.setButtons(this.state.buttonSeries);
     this.game.restart();
   }
 
   speedRunGame() {
+    this.setState({ gameFinished: false });
     this.game.setSpeed(5);
     this.game.setButtons(this.state.buttonSeries);
     this.game.restart();
   }
 
-  gameOver({ score, coins }) {
+  gameOver(gameResult) {
+    this.setState({ gameResult, gameFinished: true });
+    const { score, coins } = gameResult;
     console.log(
       '%c GAME OVER. Score %d, Coins %d',
       'font-size:3em;color:red;',
@@ -166,6 +184,8 @@ class TryGame extends Component {
   }
 
   render() {
+    const { gameFinished, gameResult } = this.state;
+    const { score, coins } = gameResult;
     return (
       <Container>
         <TitleContainer>
@@ -177,6 +197,11 @@ class TryGame extends Component {
         <GameContainer>
           <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
         </GameContainer>
+        {gameFinished && (
+          <GameResultContainer>
+            <ResultScreen score={score} coins={coins} />
+          </GameResultContainer>
+        )}
         <InputContainer>
           <CommandInput
             value={this.state.buttonSeries}
