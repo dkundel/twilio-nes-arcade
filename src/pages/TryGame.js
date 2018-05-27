@@ -168,7 +168,30 @@ class TryGame extends Component {
     );
   }
 
+  renderHeader() {
+    return (
+      <TitleContainer>
+        <Title>Playground</Title>
+        <Subtitle>
+          Try out your moves before submitting them to the competition.
+        </Subtitle>
+      </TitleContainer>
+    );
+  }
+
   renderControls() {
+    return (
+      <ControlContainer>
+        {AVAILABLE_BUTTONS.map(emoji => (
+          <ControlButton onClick={this.addEmoji} key={emoji}>
+            {emoji}
+          </ControlButton>
+        ))}
+      </ControlContainer>
+    );
+  }
+
+  renderAvailableControls() {
     const entries = Object.keys(RAW_MAP).map(key => {
       const val = RAW_MAP[key];
       if (key.startsWith(':')) {
@@ -183,17 +206,39 @@ class TryGame extends Component {
     return <ControlList>{entries}</ControlList>;
   }
 
+  renderManual() {
+    return (
+      <ManualContainer>
+        <ManualTitle>Manual</ManualTitle>
+        {GameManualText.split('---').map((t, idx) => (
+          <Text key={idx}>{t}</Text>
+        ))}
+        <ManualTitle>Controls</ManualTitle>
+        <Text>The following options are available:</Text>
+        {this.renderAvailableControls()}
+        <Text>
+          You can also use numbers to multiple the respective following
+          character/emoji.
+        </Text>
+        <ManualTitle>Examples</ManualTitle>
+        <Text>
+          Option 1: <br />
+          ➡️➡️➡️➡️➡️➡️➡️➡️⬅️⬅️⬅️➡️➡️🚀
+        </Text>
+        <Text>
+          Option 2: <br />
+          8➡️3⬅️➡️➡️🚀
+        </Text>
+      </ManualContainer>
+    );
+  }
+
   render() {
     const { gameFinished, gameResult } = this.state;
     const { score, coins } = gameResult;
     return (
       <Container>
-        <TitleContainer>
-          <Title>Playground</Title>
-          <Subtitle>
-            Try out your moves before submitting them to the competition.
-          </Subtitle>
-        </TitleContainer>
+        {this.renderHeader()}
         <GameContainer>
           <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
         </GameContainer>
@@ -210,35 +255,8 @@ class TryGame extends Component {
           <RunButton onClick={this.runGame}>Run Game</RunButton>
           <RunButton onClick={this.speedRunGame}>Run Game (5x Speed)</RunButton>
         </InputContainer>
-        <ControlContainer>
-          {AVAILABLE_BUTTONS.map(emoji => (
-            <ControlButton onClick={this.addEmoji} key={emoji}>
-              {emoji}
-            </ControlButton>
-          ))}
-        </ControlContainer>
-        <ManualContainer>
-          <ManualTitle>Manual</ManualTitle>
-          {GameManualText.split('---').map((t, idx) => (
-            <Text key={idx}>{t}</Text>
-          ))}
-          <ManualTitle>Controls</ManualTitle>
-          <Text>The following options are available:</Text>
-          {this.renderControls()}
-          <Text>
-            You can also use numbers to multiple the respective following
-            character/emoji.
-          </Text>
-          <ManualTitle>Examples</ManualTitle>
-          <Text>
-            Option 1: <br />
-            ➡️➡️➡️➡️➡️➡️➡️➡️⬅️⬅️⬅️➡️➡️🚀
-          </Text>
-          <Text>
-            Option 2: <br />
-            8➡️3⬅️➡️➡️🚀
-          </Text>
-        </ManualContainer>
+        {this.renderControls()}
+        {this.renderManual()}
       </Container>
     );
   }
