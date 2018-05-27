@@ -8,6 +8,12 @@ body {
   min-height: 100vh;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
   background-image: url('/scanlines.svg');
 }

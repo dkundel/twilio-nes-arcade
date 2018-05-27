@@ -7,6 +7,7 @@ const InterlacedBackground = param =>
 
 export const Title = styled.h1`
   ${PixelFont};
+  text-shadow: 5px 5px 0px #000;
 `;
 
 export const Button = styled.button`

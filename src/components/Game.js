@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
 import { NES } from 'jsnes';
 import cloneDeep from 'lodash.clonedeep';
-
-import Screen from './Screen';
-import {
-  getCurrentLives,
-  getTime,
-  getScore,
-  getCoins
-} from '../utils/marioMemory';
+import React, { Component } from 'react';
 import { parseInput } from '../utils/input';
+import {
+  getCoins,
+  getCurrentLives,
+  getScore,
+  getTime
+} from '../utils/marioMemory';
+import Screen from './Screen';
 
 const GAME_URL =
   'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
@@ -22,7 +21,7 @@ class Game extends Component {
     this.gameLoop = this.gameLoop.bind(this);
     this.layout = this.layout.bind(this);
     this.buttonInstructions = [];
-    this.gameOver = this.props.gameOver || function() {};
+    this.gameOver = this.props.onGameOver || function() {};
   }
 
   shouldComponentUpdate() {

@@ -1,12 +1,11 @@
+import { get as emoji } from 'node-emoji';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { get as emoji } from 'node-emoji';
-
-import { Title, ActionButton, Button, Text } from '../components/common';
+import { ActionButton, Button, Text, Title } from '../components/common';
 import Game from '../components/Game';
+import ResultScreen from '../components/ResultScreen';
 import { AVAILABLE_BUTTONS, RAW_MAP } from '../utils/input';
 import { GameManualText } from '../utils/text';
-import ResultScreen from '../components/ResultScreen';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -81,8 +80,7 @@ const GameContainer = styled.div`
   grid-area: game;
 `;
 
-const GameResultContainer = styled.div`
-  grid-area: game;
+const GameResultContainer = styled(GameContainer)`
   z-index: 999;
 `;
 
@@ -146,6 +144,7 @@ class TryGame extends Component {
 
   runGame() {
     this.setState({ gameFinished: false });
+    this.game.setSpeed(1);
     this.game.setButtons(this.state.buttonSeries);
     this.game.restart();
   }
@@ -240,7 +239,7 @@ class TryGame extends Component {
       <Container>
         {this.renderHeader()}
         <GameContainer>
-          <Game ref={game => (this.game = game)} gameOver={this.gameOver} />
+          <Game ref={game => (this.game = game)} onGameOver={this.gameOver} />
         </GameContainer>
         {gameFinished && (
           <GameResultContainer>
