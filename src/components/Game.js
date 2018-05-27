@@ -101,17 +101,25 @@ class Game extends Component {
       }
       this.nes.frame();
       if (!this.playerStillActive()) {
-        const finalTime = getTime(this.nes);
-        const score = getScore(this.nes);
-        const coins = getCoins(this.nes);
-        this.gameOver({ score, coins, finalTime });
-        this.reset();
+        this.finishGame();
         return;
       }
     }
 
     this.screen.writeBuffer();
-    this.renderLoop = window.requestAnimationFrame(this.gameLoop);
+    if (this.buttonInstructions.length === 0) {
+      this.finishGame();
+    } else {
+      this.renderLoop = window.requestAnimationFrame(this.gameLoop);
+    }
+  }
+
+  finishGame() {
+    const finalTime = getTime(this.nes);
+    const score = getScore(this.nes);
+    const coins = getCoins(this.nes);
+    this.gameOver({ score, coins, finalTime });
+    this.reset();
   }
 
   reset() {
