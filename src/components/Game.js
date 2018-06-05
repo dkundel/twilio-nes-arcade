@@ -10,8 +10,10 @@ import {
 } from '../utils/marioMemory';
 import Screen from './Screen';
 
-const GAME_URL =
-  'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
+const IS_PROD = process.env.NODE === 'production';
+const GAME_URL = IS_PROD
+  ? '/roms/mario.nes'
+  : 'https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
 const DEFAULT_SPEED = 1;
 
 class Game extends Component {

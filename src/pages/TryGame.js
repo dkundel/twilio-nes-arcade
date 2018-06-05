@@ -127,6 +127,7 @@ class TryGame extends Component {
 
   addEmoji(evt) {
     const value = evt.target.innerText;
+
     const buttonSeries = this.state.buttonSeries + value;
     localStorage.setItem('buttonSeries', buttonSeries);
     this.setState({ buttonSeries });
