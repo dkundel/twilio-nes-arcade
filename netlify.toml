@@ -7,3 +7,5 @@
   to = "https://d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes"
   status = 200
   force = true
+  [redirects.headers]
+    X-From = "Netlify"
