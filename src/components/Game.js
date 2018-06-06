@@ -11,7 +11,8 @@ import {
 import Screen from './Screen';
 
 const DEFAULT_SPEED = 1;
-const GAME_URL = '/roms/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
+const GAME_URL =
+  'https://cors-anywhere.herokuapp.com/d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
 
 class Game extends Component {
   constructor(props) {
