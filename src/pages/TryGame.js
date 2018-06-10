@@ -81,6 +81,7 @@ const GameContainer = styled.div`
   display: grid;
   align-items: center;
   background-color: #000;
+  justify-content: center;
 `;
 
 const GameResultContainer = styled.div`
