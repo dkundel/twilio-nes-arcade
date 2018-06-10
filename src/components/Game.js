@@ -1,6 +1,7 @@
 import { NES } from 'jsnes';
 import cloneDeep from 'lodash.clonedeep';
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { parseInput } from '../utils/input';
 import {
   getCoins,
@@ -8,7 +9,17 @@ import {
   getScore,
   getTime
 } from '../utils/marioMemory';
+import { Title } from './common';
 import Screen from './Screen';
+
+const LoadingScreen = styled.div`
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+const LoadingText = Title.withComponent('h3');
 
 const DEFAULT_SPEED = 1;
 const GAME_URL =
@@ -22,9 +33,15 @@ class Game extends Component {
     this.layout = this.layout.bind(this);
     this.buttonInstructions = [];
     this.gameOver = this.props.onGameOver || function() {};
+    this.state = {
+      loaded: false
+    };
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.loaded === false && nextState.loaded === true) {
+      return true;
+    }
     // For now let's just never re-render;
     return false;
   }
@@ -56,13 +73,21 @@ class Game extends Component {
     const memory = await (await fetch('/gameData.json')).json();
     memory.romData = romData;
     this.gameMemoryData = memory;
-    this.nes = new NES({
-      onFrame: this.screen.setBuffer,
-      onStatusUpdate: console.log
+    this.setState({
+      loaded: true
     });
-    this.layout();
+  }
 
-    window.addEventListener('resize', this.layout);
+  componentDidUpdate() {
+    if (this.state.loaded) {
+      this.nes = new NES({
+        onFrame: this.screen.setBuffer,
+        onStatusUpdate: console.log
+      });
+      this.layout();
+
+      window.addEventListener('resize', this.layout);
+    }
   }
 
   componentWillUnmount() {
@@ -140,7 +165,14 @@ class Game extends Component {
   }
 
   render() {
-    return <Screen ref={screen => (this.screen = screen)} />;
+    if (this.state.loaded) {
+      return <Screen ref={screen => (this.screen = screen)} />;
+    }
+    return (
+      <LoadingScreen>
+        <LoadingText>Loading...</LoadingText>
+      </LoadingScreen>
+    );
   }
 }
 

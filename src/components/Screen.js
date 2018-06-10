@@ -72,9 +72,16 @@ class Screen extends Component {
   stretchToContainer = () => {
     const container = this.canvas.parentNode;
     const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const containerRatio = containerHeight / containerWidth;
     const ratio = SCREEN_HEIGHT / SCREEN_WIDTH;
-    this.canvas.style.width = `${containerWidth}px`;
-    this.canvas.style.height = `${Math.round(containerWidth * ratio)}px`;
+    if (containerRatio > ratio) {
+      this.canvas.style.width = `${containerWidth}px`;
+      this.canvas.style.height = `${Math.round(containerWidth * ratio)}px`;
+    } else {
+      this.canvas.style.height = `${containerHeight}px`;
+      this.canvas.style.width = `${Math.round(containerHeight / ratio)}px`;
+    }
   };
 }
 

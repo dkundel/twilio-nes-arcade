@@ -39,9 +39,14 @@ const ScoreList = styled(RawScoreList)`
 
 const GameContainer = styled.div`
   grid-area: game;
+  display: grid;
+  background-color: #000;
+  align-items: center;
+  justify-content: center;
 `;
 
-const GameResultContainer = styled(GameContainer)`
+const GameResultContainer = styled.div`
+  grid-area: game;
   z-index: 999;
 `;
 

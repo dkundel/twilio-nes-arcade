@@ -78,9 +78,13 @@ const CommandInput = styled.textarea`
 
 const GameContainer = styled.div`
   grid-area: game;
+  display: grid;
+  align-items: center;
+  background-color: #000;
 `;
 
-const GameResultContainer = styled(GameContainer)`
+const GameResultContainer = styled.div`
+  grid-area: game;
   z-index: 999;
 `;
 
