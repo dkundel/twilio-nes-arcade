@@ -28,6 +28,19 @@ export const Button = styled.button`
   }
 `;
 
+export const ActionLink = styled(Button.withComponent('a'))`
+  background-color: #29c467;
+  text-decoration: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  ${InterlacedBackground};
+
+  &:hover,
+  &:focus {
+    background-color: #36d576;
+  }
+`;
+
 export const ActionButton = styled(Button)`
   background-color: #29c467;
   ${InterlacedBackground};
@@ -40,6 +53,7 @@ export const ActionButton = styled(Button)`
 
 export const Text = styled.p`
   ${TextFont};
+  font-size: 1.1em;
 `;
 
 export const Link = styled.a`

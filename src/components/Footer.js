@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import { Text, Link } from './common';
+import { Link, Text } from './common';
 
 const FooterWrapper = styled.footer`
   padding: 20px;
@@ -13,6 +12,10 @@ const Footer = () => {
     <FooterWrapper>
       <Text>
         Created by <Link href="https://github.com/dkundel">Dominik Kundel</Link>
+      </Text>
+      <Text>
+        Code available on{' '}
+        <Link href="https://github.com/dkundel/twilio-nes-arcade">GitHub</Link>
       </Text>
     </FooterWrapper>
   );

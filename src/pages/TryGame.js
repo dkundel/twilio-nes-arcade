@@ -179,6 +179,7 @@ class TryGame extends Component {
         <Title>Playground</Title>
         <Subtitle>
           Try out your moves before submitting them to the competition.
+          Instructions can be found further below.
         </Subtitle>
       </TitleContainer>
     );
@@ -198,10 +199,17 @@ class TryGame extends Component {
 
   renderAvailableControls() {
     const entries = Object.keys(RAW_MAP).map(key => {
-      const val = RAW_MAP[key];
+      let val = RAW_MAP[key];
       if (key.startsWith(':')) {
         key = emoji(key);
       }
+
+      if (val === 'A') {
+        val += ' (Jump)';
+      } else if (val === 'B') {
+        val += ' (Run/Shoot)';
+      }
+
       return (
         <ControlListOption key={key}>
           {key}: <span>{val}</span>
