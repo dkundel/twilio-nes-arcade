@@ -11,9 +11,7 @@ const Footer = () => {
   return (
     <FooterWrapper>
       <Text>
-        Created by <Link href="https://github.com/dkundel">Dominik Kundel</Link>
-      </Text>
-      <Text>
+        Created by <Link href="https://github.com/dkundel">Dominik Kundel</Link>.
         Code available on{' '}
         <Link href="https://github.com/dkundel/twilio-nes-arcade">GitHub</Link>
       </Text>
