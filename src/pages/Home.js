@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { ActionLink, Text as DefaultText, Title } from '../components/common';
+import {
+  ActionLink,
+  Link,
+  Text as DefaultText,
+  Title
+} from '../components/common';
 
 const Text = styled(DefaultText)`
-  font-size: 1.4em;
+  font-size: 1.2em;
 `;
+
+const Subtitle = Title.withComponent('h3');
 
 const Container = styled.div`
   padding: 20px;
@@ -19,6 +26,7 @@ const Container = styled.div`
 
 const CallToAction = styled.div`
   margin-top: 40px;
+  margin-bottom: 60px;
 `;
 
 class Home extends Component {
@@ -49,6 +57,34 @@ class Home extends Component {
         <CallToAction>
           <ActionLink href="/try">Go to Playground</ActionLink>
         </CallToAction>
+        <div>
+          <Subtitle>About the Game</Subtitle>
+          <Text>
+            This emulator itself is powered by a library called{' '}
+            <Link href="https://npm.im/jsnes">jsnes</Link>.
+          </Text>
+          <Text>
+            The leaderboard and submissions are handled by{' '}
+            <Link href="https://twilio.com/sync">Twilio Sync</Link>.
+          </Text>
+          <Text>
+            All submissions via SMS are directly handled by{' '}
+            <Link href="https://twilio.com/sms">Twilio Programmable SMS</Link>{' '}
+            and a{' '}
+            <Link href="https://twilio.com/functions">Twilio Function</Link>.
+          </Text>
+          <Text>
+            Twitter submissions to #twilioArcade are grabbed by Zappier and then
+            forwarded to the same Twilio Function webhook.
+          </Text>
+          <Text>
+            The entire source code including the two Twilio Functions can be
+            found on{' '}
+            <Link href="https://github.com/dkundel/twilio-nes-arcade">
+              GitHub
+            </Link>
+          </Text>
+        </div>
       </Container>
     );
   }
