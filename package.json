@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "common-tags": "^1.7.2",
+    "event-emitter": "^0.3.5",
     "jsnes": "^1.0.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.flatten": "^4.4.0",
@@ -12,7 +13,9 @@
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
-    "styled-components": "^3.3.0"
+    "styled-components": "^3.3.0",
+    "twilio-common": "^0.1.7",
+    "twilio-sync": "^0.8.2"
   },
   "scripts": {
     "start": "react-scripts start",
