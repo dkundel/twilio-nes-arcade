@@ -20,22 +20,29 @@ const ListEntry = styled(Text.withComponent('li'))`
   font-size: 1.2em;
   display: flex;
   align-items: center;
+  max-height: 80px;
 `;
 
-const ScoreEntry = ({ position, name, score }) => {
+const ScoreEntry = ({ position, name, score, coins }) => {
   return (
     <ListEntry>
-      {position}. {name}: {score}
+      {position}. {name}: {score}, {coins}🏅
     </ListEntry>
   );
 };
 
 const ScoreList = ({ entries }) => {
-  entries = new Array(10).fill('foo');
+  // entries = new Array(10).fill('foo');
   return (
     <OrderedList>
       {entries.map((val, idx) => (
-        <ScoreEntry key={idx} position={idx + 1} score={9001} name="Foo" />
+        <ScoreEntry
+          key={idx}
+          position={idx + 1}
+          score={val.score}
+          name={val.name}
+          coins={val.coins}
+        />
       ))}
     </OrderedList>
   );
