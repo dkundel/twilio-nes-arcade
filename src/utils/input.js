@@ -1,9 +1,10 @@
 import { Controller } from 'jsnes';
-import { unemojify } from 'node-emoji';
 import flatten from 'lodash.flatten';
+import { unemojify } from 'node-emoji';
 
 export const WAIT = Infinity;
 export const DURATION_OF_BUTTON_IN_FRAMES = 20;
+export const PADDING_FRAMES = 200;
 
 export const RAW_MAP = {
   u: 'Up',
@@ -78,6 +79,11 @@ function convertToButtonCommandsPerFrame(buttons) {
     } else {
       instructions.push({ button, mode: 'release' });
     }
+  }
+
+  // add padding in the end to wait for jump to finish
+  for (let i = 0; i < PADDING_FRAMES; i++) {
+    instructions.push({ mode: 'none' });
   }
   return instructions;
 }
