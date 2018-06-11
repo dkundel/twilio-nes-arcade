@@ -4,6 +4,7 @@ import { Text, Title } from '../components/common';
 import Game from '../components/Game';
 import ResultScreen from '../components/ResultScreen';
 import RawScoreList from '../components/ScoreList';
+import DataClient from '../utils/data';
 
 const Container = styled.div`
   display: grid;
@@ -50,16 +51,23 @@ const GameResultContainer = styled.div`
   z-index: 999;
 `;
 
+const TOKEN_URL = 'https://dramatic-sidewalk-3548.twil.io/arcade-token';
+
+function sortDescending({ score: scoreA }, { score: scoreB }) {
+  return scoreB - scoreA;
+}
+
 class Leaderboard extends Component {
   constructor(param) {
     super(param);
     this.state = {
       currentRun: {
-        name: 'Dominik',
-        instructions:
-          '8➡️3⬅️➡️➡️🚀➡️4🚀➡️➡️3🚀➡️⬅️➡️🚀3➡️3⬅️🚀🕐🕐🚀4➡️🚀🚀➡️3🕐➡️➡️🚀🚀5🕐3➡️🚀🚀5🕐➡️15🕐🚀4➡️🚀🚀🚀➡️➡️'
+        name: null,
+        instructions: null,
+        id: null
       },
-      showScore: true,
+      showScore: false,
+      gameQueueStatus: 'idle',
       lastResult: {
         score: 0,
         coins: 0,
@@ -68,23 +76,108 @@ class Leaderboard extends Component {
       leaderboard: []
     };
     this.finishedRun = this.finishedRun.bind(this);
+    this.setup = this.setup.bind(this);
+  }
 
-    window.testRun = this.executeRun.bind(this);
+  async setup() {
+    await this.client.init();
+    this.setState({ leaderboard: this.client.getLeaderboard() });
+  }
+
+  checkAndLoadRun() {
+    const next = this.client.getNext();
+    if (next) {
+      this.setState({
+        gameQueueStatus: 'loaded',
+        currentRun: next
+      });
+    }
+  }
+
+  async componentWillMount() {
+    this.client = new DataClient(TOKEN_URL);
+    await this.setup();
+
+    this.client.on('disconnected', this.setup);
+
+    this.client.on('configUpdate', ({ config }) => {
+      this.setState({ leaderboard: config.leaderboard });
+    });
+
+    this.client.on('newSubmission', () => {
+      if (this.state.gameQueueStatus === 'idle') {
+        this.checkAndLoadRun();
+      }
+    });
+
+    this.client.on('updatedSubmission', () => {
+      if (this.state.gameQueueStatus === 'idle') {
+        this.checkAndLoadRun();
+      }
+    });
+    setTimeout(() => this.checkAndLoadRun(), 5000);
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const hasChangedGameStatusTo = val => {
+      return (
+        prevState.gameQueueStatus !== val && this.state.gameQueueStatus === val
+      );
+    };
+
+    if (hasChangedGameStatusTo('loaded')) {
+      this.executeRun();
+    }
+
+    if (hasChangedGameStatusTo('idle')) {
+      this.checkAndLoadRun();
+    }
   }
 
   executeRun() {
-    this.setState({ showScore: false });
-    this.game.setSpeed(10);
-    this.game.setButtons(this.state.currentRun.instructions);
-    this.game.restart();
+    this.setState({ showScore: false, gameQueueStatus: 'running' });
+    if (this.state.currentRun.instructions) {
+      this.game.setSpeed(5);
+      this.game.setButtons(this.state.currentRun.instructions);
+      this.game.restart();
+    }
   }
 
-  finishedRun(result) {
+  async finishedRun(result) {
+    const { id, name } = this.state.currentRun;
+    await this.updateLeaderboard(result, name);
+    await this.client.removeSubmission(id);
     this.setState({
       showScore: true,
-      lastResult: result,
-      currentRun: { name: '', instructions: '' }
+      gameQueueStatus: 'idle',
+      lastResult: { ...result, name },
+      currentRun: {}
     });
+  }
+
+  async updateLeaderboard(result, name) {
+    let { score, coins } = result;
+
+    function isNotCurrentUser(existing) {
+      if (existing.name !== name) {
+        return true;
+      }
+
+      // this should be solved more elegantly
+      // for now we'll just override the new score with the higher score
+      if (existing.name === name && existing.score > score) {
+        score = existing.score;
+        coins = existing.coins;
+      }
+      return false;
+    }
+    const newLeaderboard = [
+      ...this.state.leaderboard.filter(isNotCurrentUser),
+      { score, name, coins }
+    ]
+      .sort(sortDescending)
+      .splice(0, 10);
+    await this.client.updateLeaderboard(newLeaderboard);
   }
 
   render() {
