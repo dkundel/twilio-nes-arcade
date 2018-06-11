@@ -5,19 +5,19 @@ import { Title } from './common';
 
 const HeaderContainer = styled.header`
   text-align: center;
-  padding: 20px;
+  padding-bottom: 20px;
 `;
 const HeaderLink = styled.a`
   text-decoration: none;
 `;
 const Twilio = styled.img`
-  height: 60px;
+  height: 50px;
 `;
 const MaxTitle = styled(Title)`
   margin: 0;
   margin-top: 10px;
   text-transform: uppercase;
-  font-size: 50px;
+  font-size: 40px;
   color: #fff;
   text-decoration: none;
 

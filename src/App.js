@@ -8,16 +8,15 @@ import Leaderboard from './pages/Leaderboard';
 import TryGame from './pages/TryGame';
 
 const Container = styled.div`
+  ${prop => prop.isLeaderboard && 'overflow: hidden; max-height: 100vh;'};
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
   min-height: inherit;
-  ${prop => prop.isLeaderboard && 'max-height: 100vh;'};
-`;
-
-const Main = styled.main`
   padding: 20px;
 `;
+
+const Main = styled.main``;
 
 const MainContainer = withRouter(({ location, children }) => {
   const isLeaderboard = location.pathname === '/leaderboard';

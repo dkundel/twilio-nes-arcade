@@ -8,4 +8,7 @@ export const GameManualText = stripIndent`
   Once you are ready. Submit the score by sending a text to: +xxxxxxxxxx or 
   by tweeting it with #TwilioArcade. It will be executed at the main screen
   in the Twilio Booth and potentially make it onto the Leaderboard.
+---
+  We will use your phone number only as game input and all messages and 
+  phone numbers will be redacted after the event.
 `;

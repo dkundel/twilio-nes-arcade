@@ -45,6 +45,10 @@ class Home extends Component {
             score via SMS or via Twitter.
           </Text>
           <Text>
+            We are only using your phone number as a game input and will redact
+            all phone numbers & messages after the event.
+          </Text>
+          <Text>
             Your submission will be queued to run at the main screen in the
             Twilio booth at the event as soon as you submit it. If you crack a
             new high score you'll end up on the leaderboard.

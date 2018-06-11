@@ -14,13 +14,13 @@ const Container = styled.div`
     'title title'
     'game scores'
     'run     run';
-  grid-gap: 20px;
+  /* grid-gap: 20px; */
   max-height: 100%;
 `;
 
 const Headline = styled(Title)`
   grid-area: title;
-  margin-bottom: 0;
+  margin-bottom: 20px;
   font-size: 1.4em;
 `;
 
@@ -32,6 +32,7 @@ const SmallTitle = styled(Title.withComponent('h3'))``;
 
 const RunText = styled(Text)`
   font-size: 1.2em;
+  word-wrap: break-word;
 `;
 
 const ScoreList = styled(RawScoreList)`
@@ -44,11 +45,13 @@ const GameContainer = styled.div`
   background-color: #000;
   align-items: center;
   justify-content: center;
+  margin-right: 20px;
 `;
 
 const GameResultContainer = styled.div`
   grid-area: game;
   z-index: 999;
+  margin-right: 20px;
 `;
 
 const TOKEN_URL = 'https://dramatic-sidewalk-3548.twil.io/arcade-token';
