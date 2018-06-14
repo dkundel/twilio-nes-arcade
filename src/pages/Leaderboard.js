@@ -187,7 +187,7 @@ class Leaderboard extends Component {
     const { leaderboard, currentRun, showScore, lastResult } = this.state;
     return (
       <Container>
-        <Headline>Start at: arcade.twilio.rocks</Headline>
+        <Headline>Control Mario with emojis! Start at: arcade.twilio.rocks</Headline>
         <GameContainer>
           <Game
             ref={game => (this.game = game)}
