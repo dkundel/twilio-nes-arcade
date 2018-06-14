@@ -108,7 +108,9 @@ class Leaderboard extends Component {
     });
 
     this.client.on('newSubmission', () => {
+      console.log('new submission');
       if (this.state.gameQueueStatus === 'idle') {
+        console.log('load it!');
         this.checkAndLoadRun();
       }
     });
@@ -187,7 +189,9 @@ class Leaderboard extends Component {
     const { leaderboard, currentRun, showScore, lastResult } = this.state;
     return (
       <Container>
-        <Headline>Control Mario with emojis! Start at: arcade.twilio.rocks</Headline>
+        <Headline>
+          Control Mario with emojis! Start at: arcade.twilio.rocks
+        </Headline>
         <GameContainer>
           <Game
             ref={game => (this.game = game)}

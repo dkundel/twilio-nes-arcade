@@ -35,7 +35,6 @@ class DataClient {
 
     this.submissions = this.submissions.filter(x => !!x.instructions);
 
-
     if (this.submissions.length < 1) {
       return null;
     }
@@ -51,7 +50,8 @@ class DataClient {
   }
 
   addEventListeners() {
-    this.submissionsList.on('itemAdded', ({item}) => {
+    this.submissionsList.on('itemAdded', item => {
+      console.log(item);
       this.submissions = [...this.submissions, this.convertItemToObject(item)];
       this.emit('newSubmission', { submissions: this.submissions });
     });
@@ -64,12 +64,13 @@ class DataClient {
     this.submissionsList.on('itemRemoved', updateListManually);
     this.submissionsList.on('itemUpdated', updateListManually);
 
-    this.arcadeConfigDoc.on('updated', ({ value }) => {
+    this.arcadeConfigDoc.on('updated', value => {
       this.arcadeConfig = value;
       this.emit('configUpdate', { config: value });
     });
 
     this.arcadeConfigDoc.on('updatedRemotely', ({ value }) => {
+      console.log(value, arguments);
       this.arcadeConfig = value;
       this.emit('configUpdate', { config: value });
     });
