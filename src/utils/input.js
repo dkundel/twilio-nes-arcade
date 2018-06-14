@@ -3,6 +3,8 @@ import flatten from 'lodash.flatten';
 import { unemojify } from 'node-emoji';
 
 export const WAIT = Infinity;
+export const PRESS = 99;
+export const RELEASE = 100;
 export const DURATION_OF_BUTTON_IN_FRAMES = 20;
 export const PADDING_FRAMES = 200;
 
@@ -16,6 +18,8 @@ export const RAW_MAP = {
   s: 'START',
   x: 'SELECT',
   w: 'Wait',
+  '!': 'Hold',
+  '?': 'Release',
   ':arrow_up:': 'Up',
   ':arrow_down:': 'Down',
   ':arrow_left:': 'Left',
@@ -31,6 +35,10 @@ export const EMOJI_BUTTON_MAP = Object.keys(RAW_MAP).reduce((map, key) => {
   const mappedValue = RAW_MAP[key];
   if (mappedValue === 'Wait') {
     map[key] = WAIT;
+  } else if (mappedValue === 'Hold') {
+    map[key] = PRESS;
+  } else if (mappedValue === 'Release') {
+    map[key] = RELEASE;
   } else {
     map[key] = Controller['BUTTON_' + mappedValue.toUpperCase()];
   }
@@ -63,10 +71,27 @@ function convertEmojisToButtons(text) {
 
 function convertToButtonCommandsPerFrame(buttons) {
   const instructions = [];
+  let shouldPress = false;
+  let shouldRelease = false;
   for (const button of buttons) {
     if (button === WAIT) {
       instructions.push({ mode: 'none' });
+    } else if (button === PRESS) {
+      shouldPress = true;
+      continue;
+    } else if (button === RELEASE) {
+      shouldRelease = true;
+      continue;
     } else {
+      if (shouldPress) {
+        shouldPress = false;
+        instructions.push({ button, mode: 'press' });
+        continue;
+      } else if (shouldRelease) {
+        shouldRelease = false;
+        instructions.push({ button, mode: 'release' });
+        continue;
+      }
       instructions.push({ button, mode: 'press' });
     }
 
@@ -93,12 +118,12 @@ function expandString(input) {
   const multiplierRegEx = /\d+/g;
   const redactedInput = input.replace(multiplierRegEx, match => {
     multiplierCounts.push(parseInt(match, 10));
-    return '?';
+    return '*';
   });
   const inputArray = [...redactedInput];
   return flatten(
     inputArray.map((val, idx) => {
-      if (val !== '?') {
+      if (val !== '*') {
         return val;
       }
       const count = multiplierCounts[0];

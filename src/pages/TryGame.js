@@ -210,6 +210,10 @@ class TryGame extends Component {
         val += ' (Run/Shoot)';
       }
 
+      if (val === 'Hold' || val === 'Release') {
+        val += ' next button (See examples)';
+      }
+
       return (
         <ControlListOption key={key}>
           {key}: <span>{val}</span>
@@ -241,6 +245,9 @@ class TryGame extends Component {
         <Text>
           Option 2: <br />
           8➡️3⬅️➡️➡️🚀
+        </Text>
+        <Text>
+          Option hold B and run 3 times to the right:<br /> !✊3➡️?✊
         </Text>
       </ManualContainer>
     );
