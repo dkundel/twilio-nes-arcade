@@ -1,4 +1,4 @@
-import { NES } from 'jsnes';
+import { Controller, NES } from 'jsnes';
 import cloneDeep from 'lodash.clonedeep';
 import React, { Component } from 'react';
 import styled from 'styled-components';
@@ -152,6 +152,17 @@ class Game extends Component {
       this.renderLoop = undefined;
     }
     this.nes.fromJSON(cloneDeep(this.gameMemoryData));
+    const allButtons = [
+      Controller.BUTTON_A,
+      Controller.BUTTON_B,
+      Controller.BUTTON_DOWN,
+      Controller.BUTTON_LEFT,
+      Controller.BUTTON_RIGHT,
+      Controller.BUTTON_UP,
+      Controller.BUTTON_START,
+      Controller.BUTTON_SELECT
+    ];
+    allButtons.forEach(btn => this.nes.buttonUp(1, btn));
   }
 
   playerStillActive() {
