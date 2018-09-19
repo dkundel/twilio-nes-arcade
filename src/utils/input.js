@@ -28,7 +28,7 @@ export const RAW_MAP = {
   ':fist:': 'B',
   ':raised_hand:': 'START',
   ':point_right:': 'SELECT',
-  ':clock1:': 'Wait'
+  ':clock1:': 'Wait',
 };
 
 export const EMOJI_BUTTON_MAP = Object.keys(RAW_MAP).reduce((map, key) => {
@@ -54,7 +54,7 @@ export const AVAILABLE_BUTTONS = [
   '✊',
   '✋',
   '👉',
-  '🕐'
+  '🕐',
 ];
 
 function convertEmojisToButtons(text) {
@@ -126,7 +126,7 @@ function expandString(input) {
       if (val !== '*') {
         return val;
       }
-      const count = multiplierCounts[0];
+      const count = isNaN(multiplierCounts[0]) ? 0 : multiplierCounts[0];
       multiplierCounts = multiplierCounts.slice(1);
       const emoji = inputArray[idx + 1];
       return new Array(count - 1).fill(emoji);

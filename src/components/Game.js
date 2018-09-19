@@ -147,6 +147,10 @@ class Game extends Component {
   }
 
   reset() {
+    if (!this.nes) {
+      return;
+    }
+
     if (this.renderLoop) {
       window.cancelAnimationFrame(this.renderLoop);
       this.renderLoop = undefined;
