@@ -7,7 +7,7 @@ import {
   getCoins,
   getCurrentLives,
   getScore,
-  getTime
+  getTime,
 } from '../utils/marioMemory';
 import { Title } from './common';
 import Screen from './Screen';
@@ -23,7 +23,7 @@ const LoadingText = Title.withComponent('h3');
 
 const DEFAULT_SPEED = 1;
 const GAME_URL =
-  'https://cors-anywhere.herokuapp.com/d3cto2l652k3y0.cloudfront.net/Super%20Mario%20Bros.%20(JU)%20(PRG0)%20[!].nes';
+  'https://cors-anywhere.herokuapp.com/http://www.vertigofx.com/public/games/roms/nes/Super%20Mario%20Bros%20(Rev%201)%20(JU).nes';
 
 class Game extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class Game extends Component {
     this.buttonInstructions = [];
     this.gameOver = this.props.onGameOver || function() {};
     this.state = {
-      loaded: false
+      loaded: false,
     };
   }
 
@@ -74,7 +74,7 @@ class Game extends Component {
     memory.romData = romData;
     this.gameMemoryData = memory;
     this.setState({
-      loaded: true
+      loaded: true,
     });
   }
 
@@ -82,7 +82,7 @@ class Game extends Component {
     if (this.state.loaded) {
       this.nes = new NES({
         onFrame: this.screen.setBuffer,
-        onStatusUpdate: console.log
+        onStatusUpdate: console.log,
       });
       this.layout();
 
@@ -160,7 +160,7 @@ class Game extends Component {
       Controller.BUTTON_RIGHT,
       Controller.BUTTON_UP,
       Controller.BUTTON_START,
-      Controller.BUTTON_SELECT
+      Controller.BUTTON_SELECT,
     ];
     allButtons.forEach(btn => this.nes.buttonUp(1, btn));
   }
